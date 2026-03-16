@@ -29,3 +29,15 @@
   color: white;
   z-index: 1000;
 }
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+  padding: 1.5rem;
+}
+.event-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 0.5fr));
+  gap: 1.5rem;
+  padding: 1.5rem;
+}

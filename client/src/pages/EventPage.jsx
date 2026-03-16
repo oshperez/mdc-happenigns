@@ -1,23 +1,26 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
+import { formatDate, daysLeft } from "../utils/helpers.js";
 
 export default function EventsPage() {
   const [searchParams] = useSearchParams();
+  const [events, setEvents] = useState([]);
+
   const campus = searchParams.get("campus");
 
-  const events = [
-    { id: 1, title: "Tech Club Meeting", campus: "Kendall", date: "May 10" },
-    { id: 2, title: "Art Exhibition", campus: "Wolfson", date: "May 11" },
-    { id: 3, title: "Career Fair", campus: "North", date: "May 15" },
-    { id: 4, title: "Music Festival", campus: "Homestead", date: "May 20" },
-  ];
+  useEffect(() => {
+    fetch("http://localhost:3001/events")
+      .then((res) => res.json())
+      .then((data) => setEvents(data))
+      .catch((err) => console.error(err));
+  }, []);
 
   const filteredEvents = !campus
     ? events
     : events.filter((event) => event.campus === campus);
 
   return (
-    <div className="grid">
+    <div className="event-grid">
       {filteredEvents.length === 0 ? (
         <p>No events in this campus</p>
       ) : (
@@ -30,7 +33,10 @@ export default function EventsPage() {
             </p>
 
             <p>
-              <strong>Date:</strong> {event.date}
+              <strong>Date:</strong> {formatDate(event.date)}
+            </p>
+            <p>
+              <strong>Countdown</strong> {daysLeft(event.date)}
             </p>
 
             <button>View Event</button>
